@@ -25,7 +25,6 @@ bookmarkRouter.get('/:id', (req, res) =>{
 
 bookmarkRouter.post('/', (req,res)=>{
   const{ title,url,description = '', rating } = req.body;
-
   const id = uuid();
 
   if (!title){
