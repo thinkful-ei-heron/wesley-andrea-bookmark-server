@@ -9,6 +9,7 @@ bookmarkRouter.get('/', (req, res) =>{
   res.json(bookmarks);
 });
 
+//GET
 bookmarkRouter.get('/:id', (req, res) =>{
   const { id }= req.params;
   // eslint-disable-next-line eqeqeq
@@ -23,6 +24,7 @@ bookmarkRouter.get('/:id', (req, res) =>{
   res.json(bookmark);
 });
 
+//POST
 bookmarkRouter.post('/', (req,res)=>{
   const{ title,url,description = '', rating } = req.body;
   const id = uuid();
@@ -47,10 +49,29 @@ bookmarkRouter.post('/', (req,res)=>{
     rating
   };
 
-bookmarks.push(bookmark);
-logger.info(`Bookmark with id ${id} created`);
-res.status(201).location(`http://localhost:8000/bookmarks/${id}`).json(bookmark);
+  bookmarks.push(bookmark);
+  logger.info(`Bookmark with id ${id} created`);
+  res.status(201).location(`http://localhost:8000/bookmarks/${id}`).json(bookmark);
+});
 
+//DELETE
+bookmarkRouter.delete('/:id', (req, res) =>{
+  const { id } = req.params;
+  // eslint-disable-next-line eqeqeq
+  const bookmarkIndex = bookmarks.findIndex(b => b.id == id);
+
+  if(bookmarkIndex === -1){
+    logger.error(`Bookmark with id ${id} not found.`);
+    return res  
+      .status(404)
+      .send('Not found');
+  }
+
+  bookmarks.splice(bookmarkIndex, 1);
+  
+  logger.info(`Bookmark with id ${id} deleted.`);
+
+  res.status(204).end();
 });
 
 
