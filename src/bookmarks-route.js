@@ -4,7 +4,6 @@ const uuid = require('uuid/v4');
 const logger = require('./logger');
 const bookmarkRouter = express.Router();
 const bookmarks = require('./bookmarkData');
-const bodyParser = express.json();
 
 bookmarkRouter.get('/', (req, res) =>{
   res.json(bookmarks);
@@ -24,11 +23,8 @@ bookmarkRouter.get('/:id', (req, res) =>{
   res.json(bookmark);
 });
 
-bookmarkRouter.post('/',(req,res)=>{
-  const title = req.body.title;
-  const url = req.body.url;
-  const description = req.body.description || ' ';
-  const rating = req.body.rating;
+bookmarkRouter.post('/', (req,res)=>{
+  const{ title,url,description = '', rating } = req.body;
 
   const id = uuid();
 
